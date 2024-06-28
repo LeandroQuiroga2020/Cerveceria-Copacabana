@@ -1,0 +1,143 @@
+{% include 'sitio/cabecera.html' %}  
+
+<h1 class="text-success"><strong>SECCIÓN DE LIBROS</strong></h1>
+
+<div class="col-md-7">
+ <div
+    class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Valor</th>
+                <th scope="col">ID del producto poner en compra</th>
+            
+            </tr>
+        </thead>                    
+        <tbody>
+           
+            {% for libro in libros %}
+            {% set index = loop.index0 %} 
+            
+            <tr class="">
+                
+                <td>{{ libro[0] }}</td>
+                <td>{{ libro[1] }}</td>
+                <td>
+                    <img width="60" src="/img/{{ libro[2] }}" class="img-fluid rounded-top" alt=""/>
+                    {{ libro[2] }}
+                </td>
+                <td>{{ libro[3] }}</td>
+
+                <td>             
+                <form action="/procesar_formulario" method="post">                 
+                        <input value="{{ libro[3] }}" type="text" name="txtID" id="txtID">
+                        <button type="submit" name='boton' value="{{index}}"> Agregar al menú {{index}} : </button>
+
+                        
+                </form> 
+                 
+                </td>               
+            </tr>
+            {% endfor%}
+            
+        </tbody>
+    </table>
+     
+    
+ </div>
+ 
+</div>
+
+
+<ul id="lista">
+    {% for valor in valores %}
+    <li>{{ libros[valor] }}</li>
+   
+    {% endfor %}
+</ul>
+
+<h4>Valor acumulado : ${{sumaMenu}}</h4>
+
+
+    <style>
+    /* Estilos para la ventana emergente */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        max-height: 400px; /* Altura máxima para la ventana emergente */
+        overflow-y: auto; /* Agregar desplazamiento vertical si el contenido excede la altura máxima */
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+    }
+    
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+    }
+</style>
+    
+  
+    
+    <button onclick="abrirVentana()">Verificar Venta</button>
+    
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <h2>Ticket De Venta Detallada</h2>
+
+        <ul id="lista">
+            {% for valor in valores %}
+            <li>{{ libros[valor] }}</li>
+           
+            {% endfor %}
+        </ul>
+        
+        <h4>Valor acumulado : ${{sumaMenu}}</h4>
+        <button onclick="cerrarVentana()">Cerrar</button>
+    </div>
+    
+<script>
+
+    function abrirVentana() {
+        var overlay = document.getElementById('overlay');
+        var popup = document.getElementById('popup');
+    
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+    }
+    
+    function cerrarVentana() {
+        var overlay = document.getElementById('overlay');
+        var popup = document.getElementById('popup');
+    
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+        
+        var lista = document.getElementById('lista');
+            while (lista.firstChild) {
+                lista.removeChild(lista.firstChild);
+        
+            }
+        
+    }
+    </script>
+    
+    
+
+{% include 'sitio/pie.html' %} 
